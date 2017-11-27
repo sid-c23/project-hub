@@ -1,0 +1,69 @@
+{
+  "users": {
+    "sidID": {
+      "name": "Sid",
+      "email": "Sid@gmail.com",
+      "projects": {
+        "grammarProjectID": true
+      },
+      "todos": {
+        "todoID1": true,
+        "todoID3": true
+      }
+    }
+  },
+  "projects": {
+    "grammarProjectID": {
+      "code": "code1",
+      "name": "Grammar Project",
+      "creator": "sidID",
+      "members": {
+        "sidID": true,
+        "vivekID": true,
+        "kyleID": true,
+        "claytonID": true
+      },
+      "todos": {
+        "todoID1": true,
+        "todoID2": true
+      },
+      "dateCreated": "somedatehere",
+      "dateDue": "11/22/2018"
+    }
+  },
+  "todos": {
+    "todoID1": {
+      "message": "Some todo",
+      "dateDue": "11/22/2017",
+      "project": "projectID",
+      "assignedTo": "userID"
+    },
+    "todoID2": {
+      "message": "2",
+      "project": "projectID",
+      "assignedTo": "userID"
+    },
+    "todoID3": {
+      "message": "3",
+      "project": "projectID",
+      "assignedTo": "userID"
+    }
+  },
+  "messages": {
+    "grammarProjectID": {
+      "messageID1": {
+        "nameID": "sidID",
+        "message": "some message",
+        "timestamp": "some time"
+      },
+      "messageID2": {
+        "nameID": "claytonID",
+        "message": "message 2",
+        "timestamp": "some other time"
+      }
+    }
+  },
+  "codes": {
+    "code1": "proj1"
+  }
+}
