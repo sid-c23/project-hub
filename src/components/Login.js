@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Grid, Message, Button } from 'semantic-ui-react';
+import {Grid, Message, Button } from 'semantic-ui-react';
 import { app, googleProvider } from '../base';
 import { Redirect } from 'react-router-dom';
 
@@ -23,10 +23,10 @@ class Login extends Component {
 
     app.auth().fetchProvidersForEmail(email)
       .then((providers) => {
-        if(providers.length==0) {
+        if(providers.length===0) {
           //create user
           return app.auth().createUserWithEmailAndPassword(email, password)
-        } else if (providers.indexOf("password") == -1) {
+        } else if (providers.indexOf("password") === -1) {
           //used google
           this.setState({
             wrongAuth: true

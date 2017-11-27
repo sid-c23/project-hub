@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { Icon } from "semantic-ui-react";
 
 class Navigation extends Component {
   render() {
@@ -8,10 +7,10 @@ class Navigation extends Component {
     const rightMenu = (this.props.isAuthenticated ) ? (
       <div className="right item">
         <div >
-          <Link to="/profile"><Icon name="user circle outline large" aria-label="View Profile"></Icon></Link>
+          <Link to="/profile"><i className="icon user circle outline large" aria-label="View Profile"></i></Link>
         </div>
         <div>
-          <Link to="/logout"> <Icon name="log out large" aria-label="Log Out"></Icon></Link>
+          <Link to="/logout"> <i className="icon log out large" aria-label="Log Out"></i></Link>
         </div>
       </div>
     ) : (
