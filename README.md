@@ -1,5 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-## BETA
+## Work in Progress!!
+
 ## Welcome to Project Hub!
 
 Project Hub is a web application designed to encourage efficient communication between students and project members.
