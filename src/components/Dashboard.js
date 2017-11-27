@@ -9,7 +9,7 @@ class Dashboard extends Component {
     //   <tr>
     //     <td>{todo.projectID}</td>
     //     <td>{todo.todo}</td>
-    //     <td>{todo.dateDue}</td>
+    //     <td>{todo.dateDue}</td>  Due {project["dateDue"]} | {Object.keys(project["members"]).length} members
     //   </tr>
     // ))
     // const projects = this.props.projects
@@ -20,16 +20,21 @@ class Dashboard extends Component {
     //
     // })
     const projects = this.props.projects
+
     const projectsKeys = Object.keys(projects)
     const mappedProjects = projectsKeys.map( (id) => {
       const project = projects[id]
+      
+
       return (
         <div className="ui card fluid" key={id}>
           <div className="content">
             <div className="header">{project["projectName"]}</div>
             <div className="meta">
               Due {project["dateDue"]} | {Object.keys(project["members"]).length} members
+
             </div>
+            <p>Share this code with your group members: {project["code"]}</p>
           </div>
         </div>
       )
@@ -39,7 +44,7 @@ class Dashboard extends Component {
     return (
       <Grid>
         <Grid.Column width={7}>
-          <h1>All To-Do's</h1>
+          <h1>Your To-Do's</h1>
           <table className="ui celled table">
             <thead>
               <tr>

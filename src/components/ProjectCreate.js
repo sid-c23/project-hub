@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import {Grid} from 'semantic-ui-react';
 class ProjectCreate extends Component {
+
+  createProject(event) {
+    event.preventDefault();
+    const projectName = this.nameInput.value
+    const dateDue = this.dateInput.value
+    this.props.addProject(projectName, dateDue)
+    this.createForm.reset()
+  }
+
   render() {
     return (
       <Grid>
         <Grid.Column width={10}>
           <h1>Create a New Project</h1>
-          <form className="ui form" ref={(form) => this.createForm = form}>
+          <form className="ui form" ref={(form) => this.createForm = form} onSubmit={this.createProject.bind(this)}>
             <div className="field">
               <label>Project Name:</label>
               <input type="text" name="projectName" placeholder="Unique and Related Name" ref={(input) => this.nameInput = input}/>

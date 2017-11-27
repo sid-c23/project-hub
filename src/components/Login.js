@@ -26,6 +26,7 @@ class Login extends Component {
         if(providers.length===0) {
           //create user
           return app.auth().createUserWithEmailAndPassword(email, password)
+            
         } else if (providers.indexOf("password") === -1) {
           //used google
           this.setState({
@@ -40,9 +41,12 @@ class Login extends Component {
       .then((user) => {
         if (user && user.email) {
           this.loginForm.reset()
+          console.log(this.props)
+
           this.setState({
             redirect: true
           })
+
         }
       })
       .catch((err) => {

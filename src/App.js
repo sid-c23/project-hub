@@ -14,49 +14,96 @@ class App extends Component {
     this.state = {
       currentUser: null,
       isAuthenticated: false,
-      projects: {}
+      projects: {},
+      userData: {},
+      todos: {},
+      messages: {},
+      codes: {}
     }
   }
 
-  addProject(projectName, dateDue, creatorID, members, todos) {
+  // createUser(user) {
+  //
+  //   this.setState({
+  //     user: {
+  //       name: (user["displayName"]) ? user["diplayName"] : "",
+  //       email: user["email"],
+  //       todos: {
+  //
+  //       },
+  //       projects: {
+  //
+  //       }
+  //     }
+  //   })
+  // }
+
+  addProject(projectName, dateDue) {
     const projects = {...this.state.projects}
-
+    const currentUsrID = this.state.currentUser.uid
+    const codes = {...this.state.codes}
     const id = Date.now()
-
+    const projCode = (Math.round(Math.random() * (99999 - 1234 + 1) + 1234))
     projects[id] = {
       projectName,
       dateDue,
-      creatorID,
-      members,
-      todos,
-      dateCreated: id
+      creator: currentUsrID,
+      members: {
+
+      },
+      todos: {},
+      dateCreated: id,
+      code: projCode
     }
+    projects[id]["members"][currentUsrID] = true
+
+    const usrProjects = {...this.state.userData.projects}
+    usrProjects[id] = true
+    codes[projCode] = id
     this.setState({
-      projects
+      projects,
+      userData: {
+        projects: usrProjects
+      },
+      codes
+
     })
 
   }
 
   componentWillMount() {
-    this.projectsRef = base.syncState('projects', {
-      context: this,
-      state: 'projects'
-    })
     this.removeAuthListener = app.auth().onAuthStateChanged( (user) => {
       if (user) {
         this.setState({
-          isAuthenticated: true
+          isAuthenticated: true,
+          currentUser: user
+        })
+        this.userRef = base.syncState(`userData/${user.uid}`, {
+          context: this,
+          state: 'userData'
+        })
+        this.projectsRef = base.syncState('projects', {
+          context: this,
+          state: 'projects'
+        })
+        this.codesRef = base.syncState('codes', {
+          context: this,
+          state: 'codes'
         })
       } else {
         this.setState({
-          isAuthenticated: false
+          isAuthenticated: false,
+          currentUser: null
         })
       }
     })
+    console.log(this.state.userData)
   }
 
   componentWillUnmount() {
     base.removeBinding(this.projectsRef)
+    base.removeBinding(this.userRef)
+    base.removeBinding(this.codesRef)
     this.removeAuthListener()
   }
 

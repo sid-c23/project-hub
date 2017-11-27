@@ -1,8 +1,6 @@
 {
-  "users": {
+  "userData": {
     "sidID": {
-      "name": "Sid",
-      "email": "Sid@gmail.com",
       "projects": {
         "grammarProjectID": true
       },
