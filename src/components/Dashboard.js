@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 // import ProjectView from './ProjectView';
 class Dashboard extends Component {
 
@@ -19,13 +19,12 @@ class Dashboard extends Component {
     //   return <ProjectView key={id} projectName={project["projectName"]} creatorID={project["creatorID"]} numPeople={Object.keys(project["members"]).length} dateDue={project["dateDue"]} />
     //
     // })
-    const projects = this.props.projects
 
+    const projects = this.props.projects
     const projectsKeys = Object.keys(projects)
+    const userProjects = Object.keys(this.props.userProjects)
     const mappedProjects = projectsKeys.map( (id) => {
       const project = projects[id]
-      
-
       return (
         <div className="ui card fluid" key={id}>
           <div className="content">
@@ -40,6 +39,14 @@ class Dashboard extends Component {
       )
 
     })
+
+
+
+    if (!this.props.isAuthenticated) {
+      return (
+        <Redirect to="/login" />
+      )
+    }
 
     return (
       <Grid>

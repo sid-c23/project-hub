@@ -26,7 +26,7 @@ class Login extends Component {
         if(providers.length===0) {
           //create user
           return app.auth().createUserWithEmailAndPassword(email, password)
-            
+
         } else if (providers.indexOf("password") === -1) {
           //used google
           this.setState({
@@ -97,7 +97,7 @@ class Login extends Component {
           ) : (
             null
           )}
-          <Button fluid color="olive" onClick={this.loginWithGoogle.bind(this)}>Log In with Google</Button><br/>
+          <button className="ui google plus button fluid" onClick={this.loginWithGoogle.bind(this)}><i className="google plus icon"></i>Sign in With Google</button><br/>
           <form className="ui form" onSubmit={this.loginWithCreds.bind(this)} ref={(form) => this.loginForm = form}>
             <Message info>
               <Message.Header>Don't have an account? We got you covered:</Message.Header>

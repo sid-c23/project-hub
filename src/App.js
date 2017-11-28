@@ -15,7 +15,9 @@ class App extends Component {
       currentUser: null,
       isAuthenticated: false,
       projects: {},
-      userData: {},
+      userData: {
+        projects: {}
+      },
       todos: {},
       messages: {},
       codes: {}
@@ -82,7 +84,8 @@ class App extends Component {
           context: this,
           state: 'userData'
         })
-        this.projectsRef = base.syncState('projects', {
+
+        this.projectsRef = base.syncState(`projects`, {
           context: this,
           state: 'projects'
         })
@@ -97,7 +100,7 @@ class App extends Component {
         })
       }
     })
-    console.log(this.state.userData)
+    //console.log(this.state.userData)
   }
 
   componentWillUnmount() {
@@ -108,6 +111,9 @@ class App extends Component {
   }
 
   render() {
+
+
+
     return (
       <div className="ui container">
         <BrowserRouter>
@@ -119,7 +125,7 @@ class App extends Component {
             )} />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/dashboard" render={ (props) => (
-              <Dashboard isAuthenticated={this.state.isAuthenticated} projects={this.state.projects} { ...props} />
+              <Dashboard userProjects={this.state.userData.projects} isAuthenticated={this.state.isAuthenticated} projects={this.state.projects} { ...props} />
             )} />
             <Route exact path="/dashboard/projects/create" render={ (props) => (
               <ProjectCreate isAuthenticated={this.state.isAuthenticated} addProject={this.addProject.bind(this)} />
