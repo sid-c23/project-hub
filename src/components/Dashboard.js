@@ -20,11 +20,15 @@ class Dashboard extends Component {
     //
     // })
 
+
+
     const projects = this.props.projects
+    // console.log(this.props.userProjects)
+    // console.log(projects);
     const projectsKeys = Object.keys(projects)
-    const userProjects = Object.keys(this.props.userProjects)
+    const usrProjectKeys = Object.keys(this.props.userProjects)
     const mappedProjects = (projectsKeys.length === 0) ? (<div></div>) : (
-      userProjects.map( (id) => {
+      usrProjectKeys.map( (id) => {
         const project = projects[id]
         return (
           <div className="ui card fluid" key={id}>

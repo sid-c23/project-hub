@@ -10,6 +10,7 @@ import ProjectView from './components/ProjectView';
 
 class App extends Component {
   constructor(props) {
+
     super(props)
     this.state = {
       currentUser: null,
@@ -41,6 +42,7 @@ class App extends Component {
   // }
 
   addProject(projectName, dateDue) {
+
     const projects = {...this.state.projects}
     const currentUsrID = this.state.currentUser.uid
     const codes = {...this.state.codes}
@@ -50,9 +52,7 @@ class App extends Component {
       projectName,
       dateDue,
       creator: currentUsrID,
-      members: {
-
-      },
+      members: {},
       todos: {},
       dateCreated: id,
       code: projCode
@@ -73,6 +73,49 @@ class App extends Component {
 
   }
 
+  joinProject(code) {
+
+    const codeProjectID = this.state.codes[code]
+    if (codeProjectID) {
+      const projMembers = this.state.projects[codeProjectID]["members"]
+      const user = this.state.currentUser.uid
+
+      if(projMembers[user]) {
+        return;
+      } else {
+        projMembers[user] = true
+      }
+
+      const usrProjects = this.state.userData.projects
+
+      if(usrProjects[codeProjectID]) {
+        return;
+      } else {
+        usrProjects[codeProjectID] = true
+      }
+
+      const stateCopy = { ...this.state}
+
+      stateCopy["projects"][codeProjectID]["members"] = projMembers
+      stateCopy["userData"]["projects"] = usrProjects
+
+      this.setState(stateCopy)
+    }
+  }
+
+  changeTotalState() {
+    this.setState({
+      currentUser: {},
+      projects: {},
+      userData: {
+        projects: {}
+      },
+      todos: {},
+      messages: {},
+      codes: {}
+    })
+  }
+
   componentWillMount() {
     this.removeAuthListener = app.auth().onAuthStateChanged( (user) => {
       if (user) {
@@ -82,21 +125,26 @@ class App extends Component {
         })
         this.userRef = base.syncState(`userData/${user.uid}`, {
           context: this,
-          state: 'userData'
+          state: 'userData',
+          defaultValue: {
+            projects: {}
+          }
+        })
+        this.codeRef = base.syncState('codes', {
+          context: this,
+          state: 'codes'
         })
 
         this.projectsRef = base.syncState(`projects`, {
           context: this,
           state: 'projects'
         })
-        this.codesRef = base.syncState('codes', {
-          context: this,
-          state: 'codes'
-        })
+
       } else {
+        //base.reset()
         this.setState({
           isAuthenticated: false,
-          currentUser: null,
+          currentUser: {},
           projects: {},
           userData: {
             projects: {}
@@ -107,14 +155,19 @@ class App extends Component {
         })
       }
     })
-    //console.log(this.state.userData)
+    //console.log(this.state)
   }
+
+
+
 
   componentWillUnmount() {
     base.removeBinding(this.projectsRef)
     base.removeBinding(this.userRef)
     base.removeBinding(this.codesRef)
     this.removeAuthListener()
+
+
   }
 
   render() {
@@ -125,15 +178,17 @@ class App extends Component {
       <div className="ui container">
         <BrowserRouter>
           <div>
-            <Navigation currentUser={this.state.currentUser} isAuthenticated={isAuthenticated}/>
+            <Navigation currentUser={this.state.currentUser} isAuthenticated={isAuthenticated} joinProject={this.joinProject.bind(this)}/>
             <Route exact path="/" render={ (props) => <Redirect to="/login" { ...props } />} />
             <Route exact path="/login" render={ (props) => (
               <Login isAuthenticated={isAuthenticated} { ...props } />
             )} />
-            <Route exact path="/logout" component={Logout} />
-            <Route exact path="/dashboard" render={ (props) => (
+            <Route exact path="/logout" render={ (props) => {
+              return <Logout changeTotalState={this.changeTotalState.bind(this)} {...props} />
+            }} />
+            <Route exact path="/dashboard" render={ (props) => {return (
               <Dashboard userProjects={this.state.userData.projects} isAuthenticated={isAuthenticated} projects={this.state.projects} { ...props} />
-            )} />
+            )}} />
             <Route exact path="/dashboard/projects/create" render={ (props) => (
               <ProjectCreate isAuthenticated={isAuthenticated} addProject={this.addProject.bind(this)} />
             )} />

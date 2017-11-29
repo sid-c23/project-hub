@@ -14,10 +14,13 @@ class Logout extends Component {
   componentWillMount() {
     app.auth().signOut()
       .then((user) => {
+        this.props.changeTotalState()
         this.setState({
           redirect: true
         })
+
       })
+
   }
 
   render() {
