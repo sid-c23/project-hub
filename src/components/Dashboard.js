@@ -23,22 +23,24 @@ class Dashboard extends Component {
     const projects = this.props.projects
     const projectsKeys = Object.keys(projects)
     const userProjects = Object.keys(this.props.userProjects)
-    const mappedProjects = projectsKeys.map( (id) => {
-      const project = projects[id]
-      return (
-        <div className="ui card fluid" key={id}>
-          <div className="content">
-            <div className="header">{project["projectName"]}</div>
-            <div className="meta">
-              Due {project["dateDue"]} | {Object.keys(project["members"]).length} members
+    const mappedProjects = (projectsKeys.length === 0) ? (<div></div>) : (
+      userProjects.map( (id) => {
+        const project = projects[id]
+        return (
+          <div className="ui card fluid" key={id}>
+            <div className="content">
+              <div className="header"><Link to={"/dashboard/projects/" + id}>{project["projectName"]}</Link></div>
+              <div className="meta">
+                Due {project["dateDue"]} | {Object.keys(project["members"]).length} members
 
+              </div>
+              <p>Share this code with your group members: <b>{project["code"]}</b></p>
             </div>
-            <p>Share this code with your group members: {project["code"]}</p>
           </div>
-        </div>
-      )
+        )
 
-    })
+      })
+    )
 
 
 

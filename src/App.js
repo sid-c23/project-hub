@@ -6,7 +6,7 @@ import { app, base } from './base';
 import Logout from './components/Logout';
 import Dashboard from './components/Dashboard';
 import ProjectCreate from './components/ProjectCreate';
-
+import ProjectView from './components/ProjectView';
 
 class App extends Component {
   constructor(props) {
@@ -96,7 +96,14 @@ class App extends Component {
       } else {
         this.setState({
           isAuthenticated: false,
-          currentUser: null
+          currentUser: null,
+          projects: {},
+          userData: {
+            projects: {}
+          },
+          todos: {},
+          messages: {},
+          codes: {}
         })
       }
     })
@@ -112,24 +119,32 @@ class App extends Component {
 
   render() {
 
-
+    const isAuthenticated = this.state.isAuthenticated
 
     return (
       <div className="ui container">
         <BrowserRouter>
           <div>
-            <Navigation currentUser={this.state.currentUser} isAuthenticated={this.state.isAuthenticated}/>
+            <Navigation currentUser={this.state.currentUser} isAuthenticated={isAuthenticated}/>
             <Route exact path="/" render={ (props) => <Redirect to="/login" { ...props } />} />
             <Route exact path="/login" render={ (props) => (
-              <Login isAuthenticated={this.state.isAuthenticated} { ...props } />
+              <Login isAuthenticated={isAuthenticated} { ...props } />
             )} />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/dashboard" render={ (props) => (
-              <Dashboard userProjects={this.state.userData.projects} isAuthenticated={this.state.isAuthenticated} projects={this.state.projects} { ...props} />
+              <Dashboard userProjects={this.state.userData.projects} isAuthenticated={isAuthenticated} projects={this.state.projects} { ...props} />
             )} />
             <Route exact path="/dashboard/projects/create" render={ (props) => (
-              <ProjectCreate isAuthenticated={this.state.isAuthenticated} addProject={this.addProject.bind(this)} />
+              <ProjectCreate isAuthenticated={isAuthenticated} addProject={this.addProject.bind(this)} />
             )} />
+            <Route
+              exact
+              path="/dashboard/projects/:projectID"
+              render={ (props) => {
+                const project = this.state.projects[props.match.params.projectID]
+                return (project ?  <ProjectView isAuthenticated={isAuthenticated} project={project} {...props}/>
+                : <h1>Whoops! No Project Found!</h1>)
+              }} />
           </div>
         </BrowserRouter>
       </div>
