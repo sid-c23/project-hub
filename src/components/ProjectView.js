@@ -42,27 +42,29 @@ class ProjectView extends Component {
             <div className="chat-messages ui feed">
               <div className="event">
                 <div className="content">
-                  <div class="content">
-                    <div class="summary">
+                  <div className="content">
+                    <div className="summary">
                       <a>Joe Henderson</a> posted on his page
-                      <div class="date">
+                      <div className="date">
                         3 days ago
                       </div>
                     </div>
-                    <div class="extra text">
+                    <div className="extra text">
                       Ours is a life of constant reruns. We're always circling back to where we'd we started, then starting all over again. Even if we don't run extra laps that day, we surely will come back for more of the same another day soon.
                     </div>
-                    <div class="meta">
-                      <a class="like">
-                        <i class="like icon"></i> 5 Likes
+                    <div className="meta">
+                      <a className="like">
+                        <i className="like icon"></i> 5 Likes
                       </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="chat-input ui form">
-              <input type="text" placeholder="Talk to group members here!"/>
+            <div className="chat-input">
+              <form className="ui form">
+                <input type="text" placeholder="Talk to group members here!"/>
+              </form>
             </div>
           </div>
         </Grid.Column>
