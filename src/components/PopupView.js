@@ -6,7 +6,8 @@ class PopupView extends Component {
     e.preventDefault()
     const projCode = this.codeInput.value
     this.props.joinProject(projCode)
-
+    this.joinForm.reset()
+    console.log(this);
 
   }
 

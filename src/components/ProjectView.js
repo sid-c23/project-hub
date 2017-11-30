@@ -1,7 +1,26 @@
 import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react'
+import MapMessages from './MapMessages';
+import {Redirect} from 'react-router-dom'
 class ProjectView extends Component {
+
+
+  messageSubmit(e) {
+    e.preventDefault()
+    //console.log(this);
+    const message = this.messageInput.value
+    this.props.addMessage(message, this.props.match.params.projectID)
+    this.messageForm.reset()
+  }
+
   render() {
+    if (!this.props.isAuthenticated) {
+      return (
+        <Redirect to="/login" />
+      )
+    }
+    const projectMessages = this.props.projectMessages
+    const mappedMessages = (projectMessages) ? ( <MapMessages messagesObj={projectMessages} />) : (<div><h3>Say something to your group members!</h3></div>)
 
     const project = this.props.project
     return (
@@ -37,34 +56,16 @@ class ProjectView extends Component {
         <Grid.Column width={2}>
         </Grid.Column>
         <Grid.Column width={7}>
-          <h1>Chat</h1>
-          <div className="chat-window">
-            <div className="chat-messages ui feed">
-              <div className="event">
-                <div className="content">
-                  <div className="content">
-                    <div className="summary">
-                      <a>Joe Henderson</a> posted on his page
-                      <div className="date">
-                        3 days ago
-                      </div>
-                    </div>
-                    <div className="extra text">
-                      Ours is a life of constant reruns. We're always circling back to where we'd we started, then starting all over again. Even if we don't run extra laps that day, we surely will come back for more of the same another day soon.
-                    </div>
-                    <div className="meta">
-                      <a className="like">
-                        <i className="like icon"></i> 5 Likes
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
+          <div className="chat-window"  style={{boxShadow: "0 2px 10px rgba(0,0,0,.2)", height: "500px", overflowY: "auto"}}>
+            <div className="chat-messages ui feed" style={{padding: "20px"}}>
+              <h1>Chat</h1>
+              {mappedMessages}
             </div>
-            <div className="chat-input">
-              <form className="ui form">
-                <input type="text" placeholder="Talk to group members here!"/>
-              </form>
+            <div className="chat-input" style={{padding: "20px"}}>
+            <form className="ui form" onSubmit={this.messageSubmit.bind(this)} ref={ (form) => this.messageForm = form}>
+            <input type="text" placeholder="Talk to group members here!" ref={ (input) => this.messageInput = input}/>
+            </form>
             </div>
           </div>
         </Grid.Column>

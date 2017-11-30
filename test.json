@@ -50,12 +50,12 @@
   "messages": {
     "grammarProjectID": {
       "messageID1": {
-        "nameID": "sidID",
+        "name": "sid",
         "message": "some message",
         "timestamp": "some time"
       },
       "messageID2": {
-        "nameID": "claytonID",
+        "name": "clayton",
         "message": "message 2",
         "timestamp": "some other time"
       }

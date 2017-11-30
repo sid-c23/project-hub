@@ -79,7 +79,7 @@ class Dashboard extends Component {
           <br/>
           <br/>
           <br/>
-          <Link to="/dashboard/projects/create" className="ui button primary fluid">Create a Project</Link>
+          <Link to="/dashboard/create" className="ui button primary fluid">Create a Project</Link>
         </Grid.Column>
       </Grid>
     );

@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import {Grid} from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
 class ProjectCreate extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      redirect: false
+    }
+  }
 
   createProject(event) {
     event.preventDefault();
@@ -8,9 +16,13 @@ class ProjectCreate extends Component {
     const dateDue = this.dateInput.value
     this.props.addProject(projectName, dateDue)
     this.createForm.reset()
+    this.setState({
+      redirect: true
+    })
   }
 
   render() {
+    if(this.state.redirect) return (<Redirect to="/dashboard" />)
     return (
       <Grid>
         <Grid.Column width={10}>

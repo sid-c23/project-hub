@@ -21,25 +21,11 @@ class App extends Component {
       },
       todos: {},
       messages: {},
-      codes: {}
+      codes: {},
+
     }
   }
 
-  // createUser(user) {
-  //
-  //   this.setState({
-  //     user: {
-  //       name: (user["displayName"]) ? user["diplayName"] : "",
-  //       email: user["email"],
-  //       todos: {
-  //
-  //       },
-  //       projects: {
-  //
-  //       }
-  //     }
-  //   })
-  // }
 
   addProject(projectName, dateDue) {
 
@@ -103,6 +89,35 @@ class App extends Component {
     }
   }
 
+  addMessage(message, projectID) {
+    const timeVal = new Date()
+    const date = (timeVal.getMonth() + 1) + "/" + (timeVal.getDate()) + "/" + (timeVal.getFullYear())
+    const time = (timeVal.getHours() % 12) + ":" + (timeVal.getMinutes())
+    const name = (this.state.currentUser.displayName) ? this.state.currentUser.displayName : this.state.currentUser.email
+    const stateCopy = { ...this.state}
+    const timestamp = Date.now()
+    console.log(stateCopy)
+    if(stateCopy["messages"][projectID]) {
+      stateCopy["messages"][projectID][timestamp] = {
+        "name": name,
+        "message": message,
+        "date": date,
+        "time": time
+      }
+    } else {
+      stateCopy["messages"][projectID] = {}
+      stateCopy["messages"][projectID][timestamp] = {
+        "name": name,
+        "message": message,
+        "date": date,
+        "time": time
+      }
+    }
+
+    this.setState(stateCopy)
+  }
+
+
   changeTotalState() {
     this.setState({
       currentUser: {},
@@ -133,6 +148,11 @@ class App extends Component {
         this.codeRef = base.syncState('codes', {
           context: this,
           state: 'codes'
+        })
+        this.messagesRef = base.syncState('messages', {
+          context: this,
+          state: 'messages',
+          defaultValue: {}
         })
 
         this.projectsRef = base.syncState(`projects`, {
@@ -165,10 +185,12 @@ class App extends Component {
     base.removeBinding(this.projectsRef)
     base.removeBinding(this.userRef)
     base.removeBinding(this.codesRef)
+    base.removeBinding(this.messagesRef)
     this.removeAuthListener()
 
 
   }
+
 
   render() {
 
@@ -189,15 +211,15 @@ class App extends Component {
             <Route exact path="/dashboard" render={ (props) => {return (
               <Dashboard userProjects={this.state.userData.projects} isAuthenticated={isAuthenticated} projects={this.state.projects} { ...props} />
             )}} />
-            <Route exact path="/dashboard/projects/create" render={ (props) => (
+            <Route exact path="/dashboard/create" render={ (props) => (
               <ProjectCreate isAuthenticated={isAuthenticated} addProject={this.addProject.bind(this)} />
             )} />
             <Route
-              exact
-              path="/dashboard/projects/:projectID"
+              exact path="/dashboard/projects/:projectID"
               render={ (props) => {
-                const project = this.state.projects[props.match.params.projectID]
-                return (project ?  <ProjectView isAuthenticated={isAuthenticated} project={project} {...props}/>
+                const id = props.match.params.projectID
+                const project = this.state.projects[id]
+                return (project ?  <ProjectView isAuthenticated={isAuthenticated} addMessage={this.addMessage.bind(this)} project={project} {...props} projectMessages={this.state["messages"][id]}/>
                 : <h1>Whoops! No Project Found!</h1>)
               }} />
           </div>

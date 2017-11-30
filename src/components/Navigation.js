@@ -10,7 +10,7 @@ class Navigation extends Component {
         <div>
           <Popup
             on="click"
-            trigger={<a className="item"><i className="icon plus"></i>Add Project</a>}
+            trigger={<a className="item"><i className="icon plus"></i>Join Project</a>}
             content={<PopupView joinProject={this.props.joinProject}/>}
           />
         </div>
