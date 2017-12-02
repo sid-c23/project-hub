@@ -28,7 +28,7 @@ class Navigation extends Component {
     return (
     <div className="ui menu">
       <div className="item header">
-        <Link to="/">Project Hub</Link>
+        <Link to="/dashboard">Project Hub</Link>
       </div>
       { rightMenu }
     </div>
