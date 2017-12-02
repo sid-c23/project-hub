@@ -240,7 +240,7 @@ class App extends Component {
         <BrowserRouter>
           <div>
             <Navigation currentUser={this.state.currentUser} isAuthenticated={isAuthenticated} joinProject={this.joinProject.bind(this)}/>
-            <Route exact path="/" render={ (props) => <Redirect to="/login" { ...props } />} />
+
             <Route exact path="/login" render={ (props) => (
               <Login isAuthenticated={isAuthenticated} { ...props } />
             )} />
@@ -261,6 +261,7 @@ class App extends Component {
                 return (project ?  <ProjectView todos={this.state.todos} isAuthenticated={isAuthenticated} addTodo={this.addTodo.bind(this)} addMessage={this.addMessage.bind(this)} project={project} {...props} projectMessages={this.state["messages"][id]}/>
                 : <h1>Whoops! No Project Found!</h1>)
               }} />
+              <Route path="/" render={ (props) => <Redirect to="/login" { ...props } />} />
           </div>
         </BrowserRouter>
       </div>
