@@ -38,8 +38,7 @@ class ProjectCreate extends Component {
             </div>
 
             <button className="ui button primary" type="submit">Create Project!</button>
-            <h1>Code: 11536</h1>
-            <p>Give the above code to your partners so you can communicate. Happy creating!</p>
+            
           </form>
         </Grid.Column>
       </Grid>

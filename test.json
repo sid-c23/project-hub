@@ -13,7 +13,7 @@
   "projects": {
     "grammarProjectID": {
       "code": "code1",
-      "name": "Grammar Project",
+      "projectName": "Grammar Project",
       "creator": "sidID",
       "members": {
         "sidID": true,
@@ -34,17 +34,17 @@
       "message": "Some todo",
       "dateDue": "11/22/2017",
       "project": "projectID",
-      "assignedTo": "userID"
+
     },
     "todoID2": {
       "message": "2",
       "project": "projectID",
-      "assignedTo": "userID"
+
     },
     "todoID3": {
       "message": "3",
       "project": "projectID",
-      "assignedTo": "userID"
+
     }
   },
   "messages": {

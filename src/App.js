@@ -17,7 +17,8 @@ class App extends Component {
       isAuthenticated: false,
       projects: {},
       userData: {
-        projects: {}
+        projects: {},
+        todos: {}
       },
       todos: {},
       messages: {},
@@ -44,15 +45,15 @@ class App extends Component {
       code: projCode
     }
     projects[id]["members"][currentUsrID] = true
-
-    const usrProjects = {...this.state.userData.projects}
-    usrProjects[id] = true
+    //const usrProjects = {...this.state.userData.projects}
+    const userData = { ...this.state.userData }
+    userData["projects"][id] = true
+    //console.log(userData)
+    //usrProjects[id] = true
     codes[projCode] = id
     this.setState({
       projects,
-      userData: {
-        projects: usrProjects
-      },
+      userData,
       codes
 
     })
@@ -89,6 +90,25 @@ class App extends Component {
     }
   }
 
+  addTodo(message, dateDue, projectID) {
+    const id = Date.now()
+    const stateCopy = { ...this.state }
+
+    stateCopy["todos"][id] = {
+      message: message,
+      dateDue: dateDue,
+      projectID: projectID
+    }
+    stateCopy["userData"]["todos"][id] = true
+    if (stateCopy["projects"][projectID]["todos"]) {
+
+    } else {
+      stateCopy["projects"][projectID]["todos"] = {}
+    }
+    stateCopy["projects"][projectID]["todos"][id] = true
+    this.setState(stateCopy)
+  }
+
   addMessage(message, projectID) {
     const timeVal = new Date()
     const date = (timeVal.getMonth() + 1) + "/" + (timeVal.getDate()) + "/" + (timeVal.getFullYear())
@@ -96,7 +116,7 @@ class App extends Component {
     const name = (this.state.currentUser.displayName) ? this.state.currentUser.displayName : this.state.currentUser.email
     const stateCopy = { ...this.state}
     const timestamp = Date.now()
-    console.log(stateCopy)
+    //console.log(stateCopy)
     if(stateCopy["messages"][projectID]) {
       stateCopy["messages"][projectID][timestamp] = {
         "name": name,
@@ -123,7 +143,8 @@ class App extends Component {
       currentUser: {},
       projects: {},
       userData: {
-        projects: {}
+        projects: {},
+        todos: {}
       },
       todos: {},
       messages: {},
@@ -142,7 +163,8 @@ class App extends Component {
           context: this,
           state: 'userData',
           defaultValue: {
-            projects: {}
+            projects: {},
+            todos: {}
           }
         })
         this.codeRef = base.syncState('codes', {
@@ -159,7 +181,12 @@ class App extends Component {
           context: this,
           state: 'projects'
         })
-
+        this.todosRef = base.syncState('todos', {
+          context: this,
+          state: 'todos',
+          defaultValue: {}
+        })
+        //console.log(this.state);
       } else {
         //base.reset()
         this.setState({
@@ -167,7 +194,8 @@ class App extends Component {
           currentUser: {},
           projects: {},
           userData: {
-            projects: {}
+            projects: {},
+            todos: {}
           },
           todos: {},
           messages: {},
@@ -175,17 +203,28 @@ class App extends Component {
         })
       }
     })
+
     //console.log(this.state)
   }
 
 
+  componentWillUpdate(nextProps, nextState) {
 
+    console.log(nextState);
+    const usrTodos = nextState.userData.todos
+    if(usrTodos) {
+
+    } else {
+      nextState.userData.todos = {}
+    }
+  }
 
   componentWillUnmount() {
     base.removeBinding(this.projectsRef)
     base.removeBinding(this.userRef)
     base.removeBinding(this.codesRef)
     base.removeBinding(this.messagesRef)
+    base.removeBinding(this.todosRef)
     this.removeAuthListener()
 
 
@@ -209,17 +248,17 @@ class App extends Component {
               return <Logout changeTotalState={this.changeTotalState.bind(this)} {...props} />
             }} />
             <Route exact path="/dashboard" render={ (props) => {return (
-              <Dashboard userProjects={this.state.userData.projects} isAuthenticated={isAuthenticated} projects={this.state.projects} { ...props} />
+              <Dashboard todos={this.state.todos} user={this.state.userData} isAuthenticated={isAuthenticated} projects={this.state.projects} { ...props} />
             )}} />
             <Route exact path="/dashboard/create" render={ (props) => (
-              <ProjectCreate isAuthenticated={isAuthenticated} addProject={this.addProject.bind(this)} />
+              <ProjectCreate isAuthenticated={isAuthenticated} addProject={this.addProject.bind(this)} {...props} />
             )} />
             <Route
               exact path="/dashboard/projects/:projectID"
               render={ (props) => {
                 const id = props.match.params.projectID
                 const project = this.state.projects[id]
-                return (project ?  <ProjectView isAuthenticated={isAuthenticated} addMessage={this.addMessage.bind(this)} project={project} {...props} projectMessages={this.state["messages"][id]}/>
+                return (project ?  <ProjectView todos={this.state.todos} isAuthenticated={isAuthenticated} addTodo={this.addTodo.bind(this)} addMessage={this.addMessage.bind(this)} project={project} {...props} projectMessages={this.state["messages"][id]}/>
                 : <h1>Whoops! No Project Found!</h1>)
               }} />
           </div>

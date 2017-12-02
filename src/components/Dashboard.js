@@ -4,29 +4,39 @@ import { Link, Redirect } from 'react-router-dom';
 // import ProjectView from './ProjectView';
 class Dashboard extends Component {
 
+
+
+
+
   render() {
-    // const mappedTodos = this.props.todos.map( (todo) => (
-    //   <tr>
-    //     <td>{todo.projectID}</td>
-    //     <td>{todo.todo}</td>
-    //     <td>{todo.dateDue}</td>  Due {project["dateDue"]} | {Object.keys(project["members"]).length} members
-    //   </tr>
-    // ))
-    // const projects = this.props.projects
-    // const projectsKeys = Object.keys(projects)
-    // const mappedProjects = projectsKeys.map( (id) => {
-    //   const project = projects[id]
-    //   return <ProjectView key={id} projectName={project["projectName"]} creatorID={project["creatorID"]} numPeople={Object.keys(project["members"]).length} dateDue={project["dateDue"]} />
-    //
-    // })
-
-
 
     const projects = this.props.projects
+    //console.log(this.props);
+    const todos = this.props.todos
+    const usrTodos = this.props.user.todos
+    const todosKeys = Object.keys(todos)
+    const usrTodosKeys = Object.keys(usrTodos)
+
+    const mappedTodos = (todosKeys.length === 0) ? (<tr></tr>) : (
+      usrTodosKeys.map( (id) => {
+        const todo = todos[id]
+        return (
+            <tr key={id}>
+              <td>{projects[todo["projectID"]]["projectName"]}</td>
+              <td>{todo.message}</td>
+              <td>{todo.dateDue}</td>
+            </tr>
+        )
+      })
+    )
+
+
+
+
     // console.log(this.props.userProjects)
     // console.log(projects);
     const projectsKeys = Object.keys(projects)
-    const usrProjectKeys = Object.keys(this.props.userProjects)
+    const usrProjectKeys = Object.keys(this.props.user.projects)
     const mappedProjects = (projectsKeys.length === 0) ? (<div></div>) : (
       usrProjectKeys.map( (id) => {
         const project = projects[id]
@@ -67,9 +77,10 @@ class Dashboard extends Component {
               </tr>
             </thead>
             <tbody>
-
+              {mappedTodos}
             </tbody>
           </table>
+
         </Grid.Column>
         <Grid.Column width={2}>
         </Grid.Column>

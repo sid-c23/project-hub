@@ -13,7 +13,20 @@ class ProjectView extends Component {
     this.messageForm.reset()
   }
 
+
+  addTodo(e) {
+    e.preventDefault()
+    const message = this.todoMessage.value
+    const dateDue = this.todoDate.value
+    const projectID = this.props.match.params.projectID
+    this.props.addTodo(message, dateDue, projectID)
+    this.todoForm.reset()
+  }
+
+
+
   render() {
+
     if (!this.props.isAuthenticated) {
       return (
         <Redirect to="/login" />
@@ -23,6 +36,22 @@ class ProjectView extends Component {
     const mappedMessages = (projectMessages) ? ( <MapMessages messagesObj={projectMessages} />) : (<div><h3>Say something to your group members!</h3></div>)
 
     const project = this.props.project
+
+    const todos = this.props.todos
+    const projectTodosKeys = (project.todos) ? Object.keys(project.todos) : []
+    const mappedTodos = projectTodosKeys.map( (id) => {
+      const todo = (todos[id]) ? todos[id] : {}
+      console.log(todo);
+      return (
+          <tr key={id}>
+            <td>{todo.message}</td>
+            <td>{todo.dateDue}</td>
+          </tr>
+      )
+    })
+
+
+
     return (
       <Grid>
       <Grid.Row>
@@ -43,15 +72,20 @@ class ProjectView extends Component {
           <table className="ui celled table">
             <thead>
               <tr>
-                <th>Project Name</th>
+
                 <th>To-Do Message</th>
                 <th>Date Due</th>
               </tr>
             </thead>
             <tbody>
-
+              {mappedTodos}
             </tbody>
           </table>
+          <form className="ui form" onSubmit={this.addTodo.bind(this)} ref={ (form) => this.todoForm = form}>
+            <input type="text" placeholder="What do you have to do?" ref={ (input ) => this.todoMessage = input}/>
+            <input type="date" placeholder="When is this due?" ref={ (input) => this.todoDate = input}/>
+            <input type="submit" className="ui button" value="Create To-Do"/>
+          </form>
         </Grid.Column>
         <Grid.Column width={2}>
         </Grid.Column>
